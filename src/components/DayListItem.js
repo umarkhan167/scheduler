@@ -24,7 +24,7 @@ export default function DayListItem(props) {
   }
 
   return(
-    <li onClick={setDay} className={dayClass} data-testid='day' selected={selected}>
+    <li onClick={() => setDay(name)} className={dayClass} data-testid='day' selected={selected}>
       <h2 className="text--regular">{name}</h2>
       {formatSport(spots)}
     </li>
