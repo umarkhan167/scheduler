@@ -10,6 +10,7 @@ import Confirm from "./Confirm";
 import Error from "./Error";
 
 const Appointment = (props) => {
+  console.log(props, "PROPS")
   const { id, time, bookInterview, cancelInterview } = props;
   const EMPTY = "EMPTY";
   const SHOW = "SHOW";
@@ -38,7 +39,7 @@ const Appointment = (props) => {
   }
 
   function cancel(name, interviewer) {
-    // eslint-disable-next-line
+    
     const interview = {
       student: name,
       interviewer,
@@ -85,8 +86,8 @@ const Appointment = (props) => {
         />
       )}
       {mode === DELETING && <Status message="Deleting..." />}
-      {mode === ERROR_SAVE && <Error message="could not save appointment" onClose={() => back(CONFIRM)}/>}
-      {mode === ERROR_DELETE && <Error message="could not cancel appointment" onClose={() => back(CONFIRM)} />}
+      {mode === ERROR_SAVE && <Error message="Could not save appointment" onClose={() => back(CONFIRM)}/>}
+      {mode === ERROR_DELETE && <Error message="Could not cancel appointment" onClose={() => back(CONFIRM)} />}
     </article>
   );
 };

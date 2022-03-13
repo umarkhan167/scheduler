@@ -4,6 +4,7 @@ import InterviewerListItem from "./InterviewerListItem";
 import PropTypes from 'prop-types';
 
 const InterviewerList = (props) => {
+  console.log(props)
   const {interviewers, onChange, value} = props;
   const interviewerItem = interviewers && interviewers.map(interviewerP => 
 
