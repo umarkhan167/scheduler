@@ -14,6 +14,7 @@ Interviewer Scheduler is a single page application for booking and tracking stud
 - Users can book interviews by typing in a student name and clicking on an interviewer from a list of interviewers
 - Days display currently remaining spots and capture updates after each modification
 
+![Desktop Design](https://github.com/umarkhan167/scheduler/blob/master/app-photos/Screen%20Shot%202022-03-14%20at%205.28.38%20PM.png)
 
 ## Setup
 
