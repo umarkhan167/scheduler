@@ -1,3 +1,6 @@
+
+//goes through state array, days object and appointments object
+//match appointments given in days object to the ones in appointments object
 export function getAppointmentsForDay(state, day) {
   const daysArr = [];
   const days = state.days;
@@ -10,6 +13,7 @@ export function getAppointmentsForDay(state, day) {
         return daysArr.push(appointments[app]);
       });
     }
+    return null
   });
   return daysArr;
 }
@@ -43,6 +47,7 @@ export function getInterviewersForDay(state, day) {
         return intArray.push(interviewers[int]);
       });
     }
+    return null
   });
   return intArray;
 }

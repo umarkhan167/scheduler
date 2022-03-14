@@ -2,15 +2,10 @@ import React from "react";
 import classNames from "classnames";
 import "components/DayListItem.scss";
 
-export default function DayListItem(props) {
-  const { name, spots, selected, setDay } = props;
-  const dayClass = classNames('day-list__item',
-    {
-      'day-list__item--selected': selected,
-      'day-list__item--full': spots === 0
-    }
-  )
 
+
+export default function DayListItem(props) {
+  
   const formatSport = (spots) => {
     
     if (spots === 0) {
@@ -22,6 +17,14 @@ export default function DayListItem(props) {
 
     return <h3 className="text--light">{spots} spots remaining</h3>;
   }
+  
+  const { name, spots, selected, setDay } = props;
+  const dayClass = classNames('day-list__item',
+    {
+      'day-list__item--selected': selected,
+      'day-list__item--full': spots === 0
+    }
+  )
 
   return(
     <li onClick={() => setDay(name)} className={dayClass} data-testid='day' selected={selected}>

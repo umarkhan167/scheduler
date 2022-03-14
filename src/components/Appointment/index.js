@@ -11,7 +11,6 @@ import Error from "./Error";
 
 const Appointment = (props) => {
   console.log(props, "PROPS")
-  const { id, time, bookInterview, cancelInterview } = props;
   const EMPTY = "EMPTY";
   const SHOW = "SHOW";
   const CREATE = "CREATE";
@@ -33,28 +32,23 @@ const Appointment = (props) => {
     };
 
     transition(SAVING, true);
-    bookInterview(id, interview)
+    props.bookInterview(props.id, interview)
       .then(() => transition(SHOW))
       .catch(() => transition(ERROR_SAVE, true));
   }
 
-  function cancel(name, interviewer) {
-    
-    const interview = {
-      student: name,
-      interviewer,
-    };
+  function cancel() {
     transition(CONFIRM);
     transition(DELETING, true);
 
-    cancelInterview(id)
+    props.cancelInterview(props.id)
       .then(() => transition(EMPTY))
       .catch(() => transition(ERROR_DELETE, true));
   }
 
   return (
     <article className="appointment">
-      <Header time={time} />
+      <Header time={props.time} />
 
       {mode === EMPTY && <Empty onAdd={() => transition(CREATE)} />}
       {mode === SHOW && (

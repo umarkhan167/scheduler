@@ -1,31 +1,7 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 
 export default function useApplicationData() {
-
-  const SET_DAY = "SET_DAY";
-  const SET_APPLICATION_DATA = "SET_APPLICATION_DATA";
-  const SET_INTERVIEW = "SET_INTERVIEW";
-
-
-        function updateSpotsForDay(days, appointments, day) {
-          let spotsRemaining = 0;
-          days.forEach((element) => {
-            if (element.name === day) {
-              element.appointments.forEach((microElement) => {
-                for (let key in appointments) {
-                  if (key == microElement) {
-                    if (appointments[key].interview === null) {
-                      spotsRemaining++;
-                    }
-                  }
-                }
-              });
-            }
-          });
-          const newDays = state.days.map(day => day.name === state.day ? {...day,spots:spotsRemaining} : day)
-          return newDays
-        }
 
   const [state, setState] = useState({
     day: "Monday",
@@ -34,7 +10,72 @@ export default function useApplicationData() {
     interviewers: {}
   });
 
+  //Updater function on spots for each day
+  function updateSpotsForDay(state, appointments) {
+    let appointment;
+    const currentDay = state.days.find((day, index) => {
+      if (state.day === day.name) {
+        appointment = index;
+        return day;
+      }
+      return null;
+    });
 
+    let spots = 0;
+    for (let dayOne of currentDay.appointments) {
+      if (appointments[dayOne].interview === null) {
+        spots++;
+      }
+    }
+
+    const days = [...state.days];
+    days[appointment] = { ...currentDay, spots: spots };
+    return days;
+  }
+
+  //function allowing users to book an interview from api data
+  function bookInterview(id, interview) {
+    const appointment = {
+      ...state.appointments[id],
+      interview: { ...interview }
+    };
+    const appointments = {
+      ...state.appointments,
+      [id]: appointment
+    };
+    return axios.put(`/api/appointments/${id}`, {interview})
+    .then(() => {
+      const spotsUpdate = updateSpotsForDay(state, appointments)
+      setState({
+        ...state,
+        days: spotsUpdate,
+        appointments
+      });
+    });
+  }
+
+//function allowing users to cancel an interview from api data
+  function cancelInterview(id) {
+    const appointment = {
+      ...state.appointments[id],
+      interview: null
+    };
+    const appointments = {
+      ...state.appointments,
+      [id]: appointment
+    };
+    return axios.delete(`/api/appointments/${id}`)
+    .then(() => {
+      const spotsUpdate = updateSpotsForDay(state, appointments)
+      setState({
+        ...state,
+        days: spotsUpdate,
+        appointments
+      });
+    });
+  }
+
+// function that sets the days for each week to be booked
   const setDay = (day) => setState(() => ({ ...state, day }));
   useEffect(() => {
     Promise.all([
@@ -52,31 +93,6 @@ export default function useApplicationData() {
         });
   }, []);
 
-  function bookInterview(id, interview) {
-    const appointment = {
-      ...state.appointments[id],
-      interview: { ...interview }
-    };
-    const appointments = {
-      ...state.appointments,
-      [id]: appointment
-    };
-    setState({
-      ...state,
-      appointments
-    });
-    return axios.put(`/api/appointments/${id}`, {interview})
-    .then(() => {
-      setState({ type:SET_INTERVIEW, interview, id});
-    });
-  }
-
-  function cancelInterview(id) {
-    
-    return axios.delete(`/api/appointments/${id}`)
-    .then(() => {
-      setState({ type:SET_INTERVIEW, interview: null, id});
-    });
-  }
   return { state, setDay, bookInterview, cancelInterview };
 }
+
